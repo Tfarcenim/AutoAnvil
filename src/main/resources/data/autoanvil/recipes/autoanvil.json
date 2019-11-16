@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "iii",
+    "ifi",
+    "iri"
+  ],
+  "key": {
+    "i": {
+      "tag": "forge:ingots/iron"
+    },
+    "f": {
+      "item": "minecraft:anvil"
+    },
+    "r": {
+      "item": "minecraft:redstone_block"
+    }
+  },
+  "result": {
+    "item": "autoanvil:autoanvil"
+  }
+}

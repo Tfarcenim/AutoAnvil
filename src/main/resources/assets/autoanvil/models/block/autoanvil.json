@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_column",
+  "textures": {
+    "end": "autoanvil:block/autoanvil_top",
+    "side": "autoanvil:block/autoanvil_side"
+  }
+}

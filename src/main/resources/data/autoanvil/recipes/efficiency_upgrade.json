@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "rgr",
+    "gIg",
+    "rgr"
+  ],
+  "key": {
+    "I": {
+      "tag": "forge:storage_blocks/iron"
+    },
+    "g": {
+      "tag": "forge:ingots/gold"
+    },
+    "r": {
+      "item": "minecraft:glowstone"
+    }
+  },
+  "result": {
+    "item": "autoanvil:efficiency_upgrade"
+  }
+}

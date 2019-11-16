@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "rrr",
+    "rir",
+    "rrr"
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:anvil"
+    },
+    "r": {
+      "item": "minecraft:experience_bottle"
+    }
+  },
+  "result": {
+    "item": "autoanvil:level_upgrade"
+  }
+}
