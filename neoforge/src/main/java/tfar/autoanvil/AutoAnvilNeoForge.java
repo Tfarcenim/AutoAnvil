@@ -1,29 +1,18 @@
 package tfar.autoanvil;
 
-import net.minecraft.world.level.block.LiquidBlock;
-import net.neoforged.neoforge.common.SoundActions;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
-import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.neoforged.neoforge.registries.RegisterEvent;
-import tfar.autoanvil.fluids.CFluidType;
+import tfar.autoanvil.client.AutoAnvilScreen;
+import tfar.autoanvil.datagen.ADatagen;
 import tfar.autoanvil.fluids.FluidProperties;
-import tfar.autoanvil.network.PacketHandler;
 import net.minecraft.client.gui.screens.MenuScreens;
 
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.material.FlowingFluid;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import static tfar.autoanvil.AutoAnvil.FLUID_FLOWING;
-import static tfar.autoanvil.AutoAnvil.FLUID_STILL;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(AutoAnvil.MOD_ID)
@@ -35,6 +24,8 @@ public class AutoAnvilNeoForge {
     // Register the doClientStuff method for modloading
     eventBus.addListener(this::doClientStuff);
     eventBus.addListener(this::register);
+    eventBus.addListener(this::capabilities);
+    eventBus.addListener(ADatagen::gather);
   }
 
     public static BaseFlowingFluid.Properties convertFluidProperties(FluidProperties properties) {
@@ -46,6 +37,9 @@ public class AutoAnvilNeoForge {
         return props;
     }
 
+    void capabilities(RegisterCapabilitiesEvent event) {
+
+    }
 
   void register(RegisterEvent event) {
     AutoAnvil.register();
@@ -58,6 +52,6 @@ public class AutoAnvilNeoForge {
   }
 
   private void doClientStuff(final FMLClientSetupEvent event) {
-    MenuScreens.register(AutoAnvil.MenuTypes.AUTO_ANVIL,AutoAnvilScreen::new);
+    MenuScreens.register(AutoAnvil.MenuTypes.AUTO_ANVIL, AutoAnvilScreen::new);
   }
 }

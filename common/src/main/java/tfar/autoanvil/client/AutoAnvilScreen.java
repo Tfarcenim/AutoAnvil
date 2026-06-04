@@ -1,6 +1,5 @@
-package tfar.autoanvil;
+package tfar.autoanvil.client;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -10,16 +9,14 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import tfar.autoanvil.AutoAnvil;
+import tfar.autoanvil.AutoAnvilMenu;
 import tfar.autoanvil.util.SideConfig;
-import tfar.autoanvil.util.Util;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class AutoAnvilScreen extends AbstractContainerScreen<AutoAnvilMenu> {
 
   private static final ResourceLocation ANVIL_RESOURCE = AutoAnvil.id("textures/gui/autoanvil.png");
-  public boolean isExpanded = false;
+  public boolean expanded;
 
   public AutoAnvilScreen(AutoAnvilMenu screenContainer, Inventory inv, Component titleIn) {
     super(screenContainer, inv, titleIn);
@@ -32,10 +29,10 @@ public class AutoAnvilScreen extends AbstractContainerScreen<AutoAnvilMenu> {
 
     int yStart = topPos + 47;
 
-    addRenderableWidget(new ToggleSidesButton(leftPos + 176,topPos + 44,20,20,Component.empty(),(b) -> {
-      ((ToggleSidesButton) b).toggle();
-      this.isExpanded = !isExpanded;
-    },isExpanded));
+    //addRenderableWidget(new ToggleSidesButton(leftPos + 176,topPos + 44,20,20,Component.empty(),(b) ->
+    //        ((ToggleSidesButton) b).toggle()));
+
+
     addRenderableWidget(new ToggleSideButton(leftPos + 198,yStart,20,20,Component.empty(),
             (b) -> ((ToggleSideButton) b).toggle(), Direction.UP));
 
@@ -107,12 +104,45 @@ public class AutoAnvilScreen extends AbstractContainerScreen<AutoAnvilMenu> {
 
     @Override
     protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-      visible = Minecraft.getInstance().screen instanceof AutoAnvilScreen autoAnvilScreen && autoAnvilScreen.isExpanded;
+      visible = expanded;
       if (visible) {
         SideConfig sideConfig = getSideConfig();
         RenderSystem.setShaderColor(sideConfig.splitColor[0], sideConfig.splitColor[1], sideConfig.splitColor[2], sideConfig.splitColor[3]);
         super.renderWidget(guiGraphics, mouseX, mouseY, partialTick);
       }
+    }
+  }
+
+  public class ToggleSidesButton extends Button {
+
+    private static final ResourceLocation TEXTURE = AutoAnvil.id("textures/gui/side_configuration_button.png");
+
+    protected ToggleSidesButton(int x, int y, int width, int height, Component message, OnPress onPress) {
+      super(x, y, width, height, message, onPress, DEFAULT_NARRATION);
+    }
+
+
+    public void toggle(){
+      expanded = !expanded;
+    }
+
+    public void render(int mouseX, int mouseY, float partialTicks) {
+     /* if (visible) {
+        Minecraft minecraft = Minecraft.getInstance();
+        minecraft.getTextureManager().bindTexture(TEXTURE);
+        GlStateManager.color4f(1,1,1,1);
+        if (expanded) {
+          blit(x, y, 0, 26, 80, 80,128,128);
+        } else {
+          blit(x, y, 0, 0, 26, 26,128,128);
+        }
+        //isHovered = mouseX >= x && mouseY >= y && mouseX < x + width && mouseY < y + height;
+      }*/
+    }
+
+    @Override
+    protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+      super.renderWidget(guiGraphics, mouseX, mouseY, partialTick);
     }
   }
 }

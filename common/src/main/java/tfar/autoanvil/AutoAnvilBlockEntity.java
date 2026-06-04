@@ -25,7 +25,7 @@ public class AutoAnvilBlockEntity extends BlockEntity implements MenuProvider {
   public AutoAnvilInventory anvilInventory = new AutoAnvilInventory(this);
   public AutoAnvilFluidInventory fluidInventory = new AutoAnvilFluidInventory(this);
 
-  public SideConfig[] sideConfigs = new SideConfig[6];
+  public SideConfig[] sideConfigs = new SideConfig[]{SideConfig.ALL,SideConfig.ALL,SideConfig.ALL,SideConfig.ALL,SideConfig.ALL,SideConfig.ALL};
 
   public static final int DATA_SLOTS = 8;
 
@@ -102,7 +102,7 @@ public class AutoAnvilBlockEntity extends BlockEntity implements MenuProvider {
 
   @Override
   public Component getDisplayName() {
-    return null;
+    return AutoAnvil.ABlocks.AUTO_ANVIL.getName();
   }
 
   public SideConfig getSideConfig(Direction direction){
