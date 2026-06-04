@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": {
+      "item": "minecraft:glowstone"
+    },
+    "I": {
+      "item": "minecraft:iron_block"
+    },
+    "g": {
+      "tag": "c:ingots/gold"
+    }
+  },
+  "pattern": [
+    "gGg",
+    "GIG",
+    "gGg"
+  ],
+  "result": {
+    "count": 1,
+    "id": "autoanvil:efficiency_upgrade"
+  }
+}

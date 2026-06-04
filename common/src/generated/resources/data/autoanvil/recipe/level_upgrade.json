@@ -1,19 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "rrr",
-    "rir",
-    "rrr"
-  ],
+  "category": "misc",
   "key": {
-    "i": {
+    "A": {
       "item": "minecraft:anvil"
     },
-    "r": {
+    "e": {
       "item": "minecraft:experience_bottle"
     }
   },
+  "pattern": [
+    "eee",
+    "eAe",
+    "eee"
+  ],
   "result": {
-    "item": "autoanvil:level_upgrade"
+    "count": 1,
+    "id": "autoanvil:level_upgrade"
   }
 }

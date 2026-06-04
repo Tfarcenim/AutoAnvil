@@ -1,9 +1,11 @@
 package tfar.autoanvil.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -18,9 +20,14 @@ public class AutoAnvilScreen extends AbstractContainerScreen<AutoAnvilMenu> {
   private static final ResourceLocation ANVIL_RESOURCE = AutoAnvil.id("textures/gui/autoanvil.png");
   public boolean expanded;
 
+  ExperienceLabel experienceLabel;
+
   public AutoAnvilScreen(AutoAnvilMenu screenContainer, Inventory inv, Component titleIn) {
     super(screenContainer, inv, titleIn);
     this.imageWidth+=22;
+    titleLabelX+=44;
+    inventoryLabelY+=9;
+    imageHeight+=9;
   }
 
   @Override
@@ -32,6 +39,9 @@ public class AutoAnvilScreen extends AbstractContainerScreen<AutoAnvilMenu> {
     //addRenderableWidget(new ToggleSidesButton(leftPos + 176,topPos + 44,20,20,Component.empty(),(b) ->
     //        ((ToggleSidesButton) b).toggle()));
 
+
+    experienceLabel = new ExperienceLabel(leftPos+8,topPos+8,8,64,Component.empty());
+    addRenderableWidget(experienceLabel);
 
     addRenderableWidget(new ToggleSideButton(leftPos + 198,yStart,20,20,Component.empty(),
             (b) -> ((ToggleSideButton) b).toggle(), Direction.UP));
@@ -50,6 +60,12 @@ public class AutoAnvilScreen extends AbstractContainerScreen<AutoAnvilMenu> {
     addRenderableWidget(new ToggleSideButton(leftPos + 198,yStart,20,20,Component.empty(),(b) -> ((ToggleSideButton) b).toggle(),Direction.DOWN));
     addRenderableWidget(new ToggleSideButton(leftPos + 218,yStart,20,20,Component.empty(),
             (b) -> ((ToggleSideButton) b).toggle(),Direction.SOUTH));
+  }
+
+  @Override
+  protected void containerTick() {
+    super.containerTick();
+    experienceLabel.setTooltip(Tooltip.create(Component.literal("Experience: "+menu.getExperience()+"/"+menu.getExperienceCapacity())));
   }
 
   @Override
@@ -145,4 +161,26 @@ public class AutoAnvilScreen extends AbstractContainerScreen<AutoAnvilMenu> {
       super.renderWidget(guiGraphics, mouseX, mouseY, partialTick);
     }
   }
+
+  public class ExperienceLabel extends AbstractWidget {
+
+    protected static final ResourceLocation XP_BAR = AutoAnvil.id("xp_bar");
+    protected static final ResourceLocation XP_BAR_BACKGROUND = AutoAnvil.id("xp_bar_background");
+
+
+    public ExperienceLabel(int x, int y, int width, int height, Component message) {
+      super(x, y, width, height, message);
+    }
+
+    @Override
+    protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+      guiGraphics.blitSprite(XP_BAR_BACKGROUND,getX(),getY(),0,width,height);
+    }
+
+    @Override
+    protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
+
+    }
+  }
+
 }

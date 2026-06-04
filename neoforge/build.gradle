@@ -54,6 +54,12 @@ dependencies {
         implementation "me.shedaniel.cloth:cloth-config-neoforge:$cloth_config_version"
         implementation "dev.architectury:architectury-neoforge:$architectury_version"
     }
+
+    // If you want to test/use Mekanism & its modules during `runClient` invocation, use the following
+    runtimeOnly("mekanism:Mekanism:${mekanism_version}")// Mekanism
+    runtimeOnly("mekanism:Mekanism:${mekanism_version}:additions")// Mekanism: Additions
+    runtimeOnly("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
+    runtimeOnly("mekanism:Mekanism:${mekanism_version}:tools")// Mekanism: Tools
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }

@@ -2,9 +2,6 @@ package tfar.autoanvil.inventory;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.world.item.ItemStack;
 import tfar.autoanvil.AutoAnvil;
 import tfar.autoanvil.AutoAnvilBlockEntity;
 import tfar.autoanvil.util.Util;
@@ -58,11 +55,11 @@ public class AutoAnvilFluidInventory {
     }
 
 
-    public int fill(CFluidStack resource,boolean action) {
+    public int fill(CFluidStack resource,boolean simulate) {
         if (resource.isEmpty() || !isValid(resource)) {
             return 0;
         }
-        if (!action) {
+        if (simulate) {
             if (stack.isEmpty()) {
                 return Math.min(capacity, resource.getAmount());
             }

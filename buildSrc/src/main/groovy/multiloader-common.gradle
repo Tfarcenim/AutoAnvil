@@ -49,6 +49,11 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+
+    maven {
+        name = "Modmaven"
+        url = "https://modmaven.dev/"
+    }
 }
 
 // Declare capabilities on the outgoing configurations.

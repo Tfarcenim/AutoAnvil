@@ -50,11 +50,11 @@ public class CFluidStack implements DataComponentHolder {
     }
 
     public CFluidStack(Holder<Fluid> fluid, int amount, DataComponentPatch patch) {
-        this((Fluid)fluid.value(), amount, PatchedDataComponentMap.fromPatch(DataComponentMap.EMPTY, patch));
+        this(fluid.value(), amount, PatchedDataComponentMap.fromPatch(DataComponentMap.EMPTY, patch));
     }
 
     public CFluidStack(Holder<Fluid> fluid, int amount) {
-        this((Fluid)fluid.value(), amount);
+        this(fluid.value(), amount);
     }
 
     public CFluidStack(Fluid fluid, int amount) {
@@ -218,7 +218,7 @@ public class CFluidStack implements DataComponentHolder {
         if (first == second) {
             return true;
         } else {
-            return first.getAmount() != second.getAmount() ? false : isSameFluidSameComponents(first, second);
+            return first.getAmount() == second.getAmount() && isSameFluidSameComponents(first, second);
         }
     }
 
@@ -240,7 +240,7 @@ public class CFluidStack implements DataComponentHolder {
         if (!first.is(second.getFluid())) {
             return false;
         } else {
-            return first.isEmpty() && second.isEmpty() ? true : Objects.equals(first.components, second.components);
+            return first.isEmpty() && second.isEmpty() || Objects.equals(first.components, second.components);
         }
     }
 

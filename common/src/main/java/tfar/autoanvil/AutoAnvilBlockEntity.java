@@ -12,11 +12,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import tfar.autoanvil.inventory.AutoAnvilFluidInventory;
 import tfar.autoanvil.inventory.AutoAnvilInventory;
+import tfar.autoanvil.inventory.CFluidStack;
 import tfar.autoanvil.util.SideConfig;
 import tfar.autoanvil.util.Util;
 
@@ -34,6 +36,10 @@ public class AutoAnvilBlockEntity extends BlockEntity implements MenuProvider {
     public int get(int index) {
       if (index < 6) {
         return sideConfigs[index].ordinal();
+      } else if (index == 6) {
+        return fluidInventory.getAmount();
+      } else if (index == 7) {
+        return fluidInventory.getCapacity();
       }
 
       return 0;
@@ -68,13 +74,29 @@ public class AutoAnvilBlockEntity extends BlockEntity implements MenuProvider {
   int materialCost = 0;
 
   public void serverTick() {
-    ItemStack result = Util.getOutput(anvilInventory.get(0), anvilInventory.get(1),this);
+
+    checkXPSlot();
+
+    ItemStack result = Util.getOutput(anvilInventory.get(AutoAnvilInventory.INPUT_SLOT_PRIMARY), anvilInventory
+            .get(AutoAnvilInventory.INPUT_SLOT_SECONDARY),this);
     if (!result.isEmpty()) {
-         if (fluidInventory.getAmount() >= getXpCost()){
-           combine(result);
-           fluidInventory.drain(getXpCost(), false);
-         }
+      if (fluidInventory.getAmount() >= getXpCost()){
+        combine(result);
+        fluidInventory.drain(getXpCost(), false);
       }
+    }
+  }
+
+  void checkXPSlot() {
+    ItemStack stack = anvilInventory.get(AutoAnvilInventory.INPUT_SLOT_XP_BOTTLE);
+    if (stack.is(Items.EXPERIENCE_BOTTLE)) {
+      int remaining = fluidInventory.getCapacity() - fluidInventory.getAmount();
+      int estimated = 7 * stack.getCount();
+      if (estimated <= remaining) {
+        fluidInventory.fill(new CFluidStack(AutoAnvil.AFluids.XP,estimated),false);
+        anvilInventory.set(AutoAnvilInventory.INPUT_SLOT_XP_BOTTLE, new ItemStack(Items.GLASS_BOTTLE,stack.getCount()));
+      }
+    }
   }
 
   public void combine(ItemStack output){
@@ -120,7 +142,7 @@ public class AutoAnvilBlockEntity extends BlockEntity implements MenuProvider {
   protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
     super.loadAdditional(tag, registries);
     anvilInventory.deserializeNBT(registries, tag.getCompound("inventory"));
-    fluidInventory.deserializeNBT(registries, tag.getCompound("inventory"));
+    fluidInventory.deserializeNBT(registries, tag.getCompound("fluid_inventory"));
 
   }
 

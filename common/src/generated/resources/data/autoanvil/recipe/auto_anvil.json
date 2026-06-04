@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "minecraft:anvil"
+    },
+    "R": {
+      "item": "minecraft:redstone_block"
+    },
+    "i": {
+      "tag": "c:ingots/iron"
+    }
+  },
+  "pattern": [
+    "iii",
+    "iAi",
+    "iRi"
+  ],
+  "result": {
+    "count": 1,
+    "id": "autoanvil:auto_anvil"
+  }
+}
