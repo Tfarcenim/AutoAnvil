@@ -4,6 +4,7 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.neoforged.neoforge.registries.RegisterEvent;
+import tfar.autoanvil.client.AutoAnvilClient;
 import tfar.autoanvil.client.AutoAnvilScreen;
 import tfar.autoanvil.datagen.ADatagen;
 import tfar.autoanvil.fluids.FluidProperties;
@@ -52,6 +53,6 @@ public class AutoAnvilNeoForge {
   }
 
   private void doClientStuff(final FMLClientSetupEvent event) {
-    MenuScreens.register(AutoAnvil.MenuTypes.AUTO_ANVIL, AutoAnvilScreen::new);
+    AutoAnvilClient.setup();
   }
 }

@@ -137,14 +137,21 @@ public class AutoAnvil {
     }
 
     public static class AFluids {
-        public static FlowingFluid XP = Services.PLATFORM.createXPSourceFluid(new FluidProperties(() -> FluidTypes.XP,() -> AFluids.XP,() -> AFluids.FLOWING_XP));
+        public static FlowingFluid XP = Services.PLATFORM.createXPSourceFluid(
+                new FluidProperties(() -> FluidTypes.XP,() -> AFluids.XP,() -> AFluids.FLOWING_XP)
+                        .bucket(() -> AItems.XP_BUCKET)
+                        .block(() -> ABlocks.XP)
+        );
         public static FlowingFluid FLOWING_XP = Services.PLATFORM.createXPFlowingFluid(
-                new FluidProperties(() -> FluidTypes.XP,() -> AFluids.XP,() -> AFluids.FLOWING_XP));
+                new FluidProperties(() -> FluidTypes.XP,() -> AFluids.XP,() -> AFluids.FLOWING_XP)
+                        .bucket(() -> AItems.XP_BUCKET)
+                        .block(() -> ABlocks.XP)
+        );
 
 
         static {
             Registry.register(BuiltInRegistries.FLUID,AutoAnvil.id("xp"), XP);
-            Registry.register(BuiltInRegistries.FLUID,AutoAnvil.id("xp_flowing"), FLOWING_XP);
+            Registry.register(BuiltInRegistries.FLUID,AutoAnvil.id("flowing_xp"), FLOWING_XP);
         }
 
         static void init() {}

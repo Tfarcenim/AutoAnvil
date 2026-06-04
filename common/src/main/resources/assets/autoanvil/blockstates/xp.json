@@ -1,5 +1,5 @@
 {
   "variants": {
-    "": { "model": "autoanvil:block/xpfluid_block" }
+    "": { "model": "autoanvil:block/xp" }
   }
 }
