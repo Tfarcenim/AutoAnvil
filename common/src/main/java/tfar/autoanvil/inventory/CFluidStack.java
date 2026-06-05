@@ -61,7 +61,7 @@ public class CFluidStack implements DataComponentHolder {
         this(fluid, amount, new PatchedDataComponentMap(DataComponentMap.EMPTY));
     }
 
-    private CFluidStack(Fluid fluid, int amount, PatchedDataComponentMap components) {
+    public CFluidStack(Fluid fluid, int amount, PatchedDataComponentMap components) {
         this.fluid = fluid;
         this.amount = amount;
         this.components = components;

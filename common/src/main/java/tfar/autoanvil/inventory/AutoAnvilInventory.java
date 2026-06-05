@@ -1,5 +1,6 @@
 package tfar.autoanvil.inventory;
 
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -38,6 +39,31 @@ public class AutoAnvilInventory {
         };
     }
 
+    public boolean canTake(int index, @Nullable Direction direction) {
+        ItemStack stack = stacks.get(index);
+        return switch (index) {
+            case INPUT_SLOT_PRIMARY, INPUT_SLOT_SECONDARY -> false;
+            case INPUT_SLOT_XP_BOTTLE -> stack.is(Items.GLASS_BOTTLE);
+            case UPGRADE_SLOT_1, UPGRADE_SLOT_2 -> false;
+            default -> true;
+        };
+    }
+
+    public boolean canPlace(int index, @Nullable Direction direction) {
+        ItemStack stack = stacks.get(index);
+        return switch (index) {
+            case OUTPUT_SLOT -> false;
+            case INPUT_SLOT_XP_BOTTLE -> stack.is(Items.EXPERIENCE_BOTTLE);
+            case UPGRADE_SLOT_1 -> stack.is(AutoAnvil.AItems.LEVEL_UPGRADE);
+            case UPGRADE_SLOT_2 -> stack.is(AutoAnvil.AItems.EFFICIENCY_UPGRADE);
+            default -> true;
+        };
+    }
+
+    public int getSlots() {
+        return stacks.size();
+    }
+
     public ItemStack get(int index) {
         return stacks.get(index);
     }
@@ -56,6 +82,12 @@ public class AutoAnvilInventory {
 
     public int getSlotLimit(int index) {
         return 99;
+    }
+
+    public ItemStack extractWithContext(int slot, int amount, boolean simulate, @Nullable Direction direction) {
+        if (!canTake(slot, direction)) return ItemStack.EMPTY;
+
+        return extract(slot, amount, simulate);
     }
 
     public ItemStack extract(int slot, int amount, boolean simulate) {
@@ -86,6 +118,11 @@ public class AutoAnvilInventory {
 
             return existing.copyWithCount(toExtract);
         }
+    }
+
+    public ItemStack insertWithContext(int slot, ItemStack stack, boolean simulate,@Nullable Direction direction) {
+        if (!canPlace(slot, direction)) return stack;
+        return insert(slot, stack, simulate);
     }
 
     public ItemStack insert(int slot, ItemStack stack, boolean simulate) {
