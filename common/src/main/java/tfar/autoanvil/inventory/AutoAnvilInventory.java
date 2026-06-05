@@ -49,8 +49,7 @@ public class AutoAnvilInventory {
         };
     }
 
-    public boolean canPlace(int index, @Nullable Direction direction) {
-        ItemStack stack = stacks.get(index);
+    public boolean canPlace(int index,ItemStack stack, @Nullable Direction direction) {
         return switch (index) {
             case OUTPUT_SLOT -> false;
             case INPUT_SLOT_XP_BOTTLE -> stack.is(Items.EXPERIENCE_BOTTLE);
@@ -78,6 +77,7 @@ public class AutoAnvilInventory {
 
     public void set(int index, ItemStack stack) {
         stacks.set(index, stack);
+        onContentsChanged(index);
     }
 
     public int getSlotLimit(int index) {
@@ -121,7 +121,7 @@ public class AutoAnvilInventory {
     }
 
     public ItemStack insertWithContext(int slot, ItemStack stack, boolean simulate,@Nullable Direction direction) {
-        if (!canPlace(slot, direction)) return stack;
+        if (!canPlace(slot,stack, direction)) return stack;
         return insert(slot, stack, simulate);
     }
 
@@ -168,6 +168,7 @@ public class AutoAnvilInventory {
 
     public void onContentsChanged(int slot) {
         if (autoAnvilBlockEntity != null) {
+            autoAnvilBlockEntity.checkInventory = true;
             autoAnvilBlockEntity.updateCapacity();
             autoAnvilBlockEntity.setChanged();
         }

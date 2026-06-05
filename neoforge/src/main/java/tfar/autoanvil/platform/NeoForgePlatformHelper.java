@@ -1,9 +1,15 @@
 package tfar.autoanvil.platform;
 
+import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AnvilMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -66,5 +72,20 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
     @Override
     public FlowingFluid createXPFlowingFluid(FluidProperties properties) {
         return new BaseFlowingFluid.Flowing(AutoAnvilNeoForge.convertFluidProperties(properties));
+    }
+
+    @Override
+    public boolean onAnvilChange(AnvilMenu container, ItemStack left, ItemStack right, Container outputSlot, String name, long baseCost, Player player) {
+        return false;
+    }
+
+    @Override
+    public boolean supportsEnchantment(ItemStack stack, Holder<Enchantment> enchantment) {
+        return stack.supportsEnchantment(enchantment);
+    }
+
+    @Override
+    public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+        return stack.isBookEnchantable(book);
     }
 }

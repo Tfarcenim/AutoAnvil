@@ -74,6 +74,14 @@ public class AutoAnvilMenu extends AbstractContainerMenu {
         return data.get(7);
     }
 
+    public int getProgress() {
+        return data.get(8);
+    }
+
+    public int getLevelsRequired() {
+        return data.get(9);
+    }
+
     @Override
     public boolean stillValid(Player player) {
         return true;

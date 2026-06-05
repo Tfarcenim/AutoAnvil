@@ -12,12 +12,15 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import tfar.autoanvil.AutoAnvil;
+import tfar.autoanvil.AutoAnvilBlockEntity;
 import tfar.autoanvil.AutoAnvilMenu;
 import tfar.autoanvil.util.SideConfig;
+import tfar.autoanvil.util.Util;
 
 public class AutoAnvilScreen extends AbstractContainerScreen<AutoAnvilMenu> {
 
   private static final ResourceLocation ANVIL_RESOURCE = AutoAnvil.id("textures/gui/autoanvil.png");
+  public static final ResourceLocation ARROW = AutoAnvil.id("arrow");
   public boolean expanded;
 
   ExperienceLabel experienceLabel;
@@ -94,8 +97,18 @@ public class AutoAnvilScreen extends AbstractContainerScreen<AutoAnvilMenu> {
 
   @Override
   protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
-
     guiGraphics.blit(ANVIL_RESOURCE,this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+
+
+    float ratio = (float)menu.getProgress() / AutoAnvilBlockEntity.PROGRESS_MAX;
+
+    int w = (int) (ratio * 22);
+
+    guiGraphics.blit(ANVIL_RESOURCE,this.leftPos+100, this.topPos+56, 198, 0, w, 16);
+
+
+    //guiGraphics.blitSprite(ARROW,leftPos+100, topPos+1,0,1, 16);
+
   }
 
   public class ToggleSideButton extends Button {
@@ -127,6 +140,26 @@ public class AutoAnvilScreen extends AbstractContainerScreen<AutoAnvilMenu> {
         super.renderWidget(guiGraphics, mouseX, mouseY, partialTick);
       }
     }
+  }
+
+  @Override
+  protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+    super.renderLabels(guiGraphics, mouseX, mouseY);
+    int level = menu.getLevelsRequired();
+    int stored = menu.getExperience();
+    int capacity = menu.getExperienceCapacity();
+
+    int xpPoints = Util.leveltoXPCost(level);
+
+    int color = 0x007f00;
+
+    if (xpPoints>capacity) {
+      color = 0x7f0000;
+    } else if (xpPoints>stored) {
+      color = 0x9f9f00;
+    }
+
+    guiGraphics.drawString(font,Component.literal("Lvl: "+level+" | XP: "+xpPoints),50,40,0xff000000| color,false);
   }
 
   public class ToggleSidesButton extends Button {
@@ -174,7 +207,19 @@ public class AutoAnvilScreen extends AbstractContainerScreen<AutoAnvilMenu> {
 
     @Override
     protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+      RenderSystem.setShaderColor(0,1,0,1);
+      //RenderSystem.enableBlend();
       guiGraphics.blitSprite(XP_BAR_BACKGROUND,getX(),getY(),0,width,height);
+
+      float ratio = (float)menu.getExperience() / (Math.max(menu.getExperienceCapacity(),1));
+
+      if (ratio > 1) {ratio = 1;}
+
+      int y0 = (int) (ratio * 64);
+
+      guiGraphics.blitSprite(XP_BAR,getX(), getY() + 64 - y0,0,width, y0);
+
+      RenderSystem.setShaderColor(1,1,1,1);
     }
 
     @Override

@@ -133,6 +133,7 @@ public class ADatagen {
 
         @Override
         protected void registerStatesAndModels() {
+            horizontalBlock(AutoAnvil.ABlocks.AUTO_ANVIL,models().getExistingFile(mcLoc("block/anvil")));
         }
     }
 

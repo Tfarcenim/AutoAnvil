@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import tfar.autoanvil.inventory.AutoAnvilFluidInventory;
 import tfar.autoanvil.inventory.AutoAnvilInventory;
 import tfar.autoanvil.inventory.CFluidStack;
+import tfar.autoanvil.util.AnvilResult;
 import tfar.autoanvil.util.SideConfig;
 import tfar.autoanvil.util.Util;
 
@@ -26,10 +27,15 @@ public class AutoAnvilBlockEntity extends BlockEntity implements MenuProvider {
 
   public AutoAnvilInventory anvilInventory = new AutoAnvilInventory(this);
   public AutoAnvilFluidInventory fluidInventory = new AutoAnvilFluidInventory(this);
+  int progress;
+
+  public static final int PROGRESS_MAX = 200;
+
+  public boolean checkInventory = true;
 
   public SideConfig[] sideConfigs = new SideConfig[]{SideConfig.ALL,SideConfig.ALL,SideConfig.ALL,SideConfig.ALL,SideConfig.ALL,SideConfig.ALL};
 
-  public static final int DATA_SLOTS = 8;
+  public static final int DATA_SLOTS = 10;
 
   private final ContainerData data = new ContainerData() {
     @Override
@@ -40,6 +46,10 @@ public class AutoAnvilBlockEntity extends BlockEntity implements MenuProvider {
         return fluidInventory.getAmount();
       } else if (index == 7) {
         return fluidInventory.getCapacity();
+      } else if (index == 8) {
+        return progress;
+      } else if (index == 9) {
+        return result.requiredLevels();
       }
 
       return 0;
@@ -70,22 +80,31 @@ public class AutoAnvilBlockEntity extends BlockEntity implements MenuProvider {
     super(AutoAnvil.BlockEntityTypes.AUTO_ANVIL,blockPos,blockState);
   }
 
-  int levelcost = 0;
-  int materialCost = 0;
+  AnvilResult result = AnvilResult.EMPTY;
 
   public void serverTick() {
 
     checkXPSlot();
 
-    ItemStack result = Util.getOutput(anvilInventory.get(AutoAnvilInventory.INPUT_SLOT_PRIMARY), anvilInventory
-            .get(AutoAnvilInventory.INPUT_SLOT_SECONDARY),this);
-    if (!result.isEmpty()) {
-      if (fluidInventory.getAmount() >= getXpCost()){
-        combine(result);
-        fluidInventory.drain(getXpCost(), false);
+    if (checkInventory) {
+      result = Util.getOutput(anvilInventory.get(AutoAnvilInventory.INPUT_SLOT_PRIMARY), anvilInventory
+              .get(AutoAnvilInventory.INPUT_SLOT_SECONDARY), this);
+      checkInventory = false;
+    }
+
+    if (!result.output().isEmpty() && fluidInventory.getAmount()>=result.xpCost()) {
+      progress++;
+      if  (progress >= PROGRESS_MAX) {
+        if (fluidInventory.getAmount() >= getXpCost(result)) {
+          combine(result);
+        }
       }
+    } else {
+      progress = 0;
     }
   }
+
+
 
   void checkXPSlot() {
     ItemStack stack = anvilInventory.get(AutoAnvilInventory.INPUT_SLOT_XP_BOTTLE);
@@ -99,27 +118,29 @@ public class AutoAnvilBlockEntity extends BlockEntity implements MenuProvider {
     }
   }
 
-  public void combine(ItemStack output){
-    ItemStack existing = anvilInventory.get(2);
+  public void combine(AnvilResult result){
+    ItemStack existing = anvilInventory.get(AutoAnvilInventory.OUTPUT_SLOT);
     if (existing.isEmpty()){
-      anvilInventory.set(2,output);
-      anvilInventory.set(0, ItemStack.EMPTY);
-      if (this.materialCost > 0) {
+      anvilInventory.set(AutoAnvilInventory.OUTPUT_SLOT,result.output());
+      anvilInventory.set(AutoAnvilInventory.INPUT_SLOT_PRIMARY, ItemStack.EMPTY);
+      if (result.materialCost() > 0) {
         ItemStack input2 = anvilInventory.get(1);
-        if (!input2.isEmpty() && input2.getCount() > this.materialCost) {
-          input2.shrink(this.materialCost);
-          anvilInventory.set(1, input2);
+        if (!input2.isEmpty() && input2.getCount() > result.materialCost()) {
+          input2.shrink(result.materialCost());
+          anvilInventory.set(AutoAnvilInventory.INPUT_SLOT_SECONDARY, input2);
         } else {
-          anvilInventory.set(1, ItemStack.EMPTY);
+          anvilInventory.set(AutoAnvilInventory.INPUT_SLOT_SECONDARY, ItemStack.EMPTY);
         }
       } else {
-        anvilInventory.set(1, ItemStack.EMPTY);
+        anvilInventory.set(AutoAnvilInventory.INPUT_SLOT_SECONDARY, ItemStack.EMPTY);
       }
+      fluidInventory.drain(getXpCost(result), false);
+      progress = 0;
     }
   }
 
-  public int getXpCost(){
-    return (int) (Math.pow(.90, anvilInventory.get(1).getCount()) * Util.leveltoXPCost(levelcost));
+  public int getXpCost(AnvilResult result){
+    return result.xpCost();
   }
 
   @Override

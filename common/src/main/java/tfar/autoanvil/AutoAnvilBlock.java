@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
@@ -37,6 +38,12 @@ public class AutoAnvilBlock extends Block implements EntityBlock {
     Direction direction = state.getValue(FACING);
     return direction.getAxis() == Direction.Axis.X ? AnvilBlock.X_AXIS_AABB : AnvilBlock.Z_AXIS_AABB;
   }
+
+  @Override
+  public BlockState getStateForPlacement(BlockPlaceContext context) {
+    return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getClockWise());
+  }
+
 
   @Override
   protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
