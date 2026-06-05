@@ -27,10 +27,9 @@ public class AutoAnvilScreen extends AbstractContainerScreen<AutoAnvilMenu> {
 
   public AutoAnvilScreen(AutoAnvilMenu screenContainer, Inventory inv, Component titleIn) {
     super(screenContainer, inv, titleIn);
-    this.imageWidth+=22;
     titleLabelX+=44;
-    inventoryLabelY+=9;
-    imageHeight+=9;
+    inventoryLabelY+=18;
+    imageHeight+=18;
   }
 
   @Override
@@ -43,7 +42,7 @@ public class AutoAnvilScreen extends AbstractContainerScreen<AutoAnvilMenu> {
     //        ((ToggleSidesButton) b).toggle()));
 
 
-    experienceLabel = new ExperienceLabel(leftPos+8,topPos+8,8,64,Component.empty());
+    experienceLabel = new ExperienceLabel(leftPos+25,topPos+56,20,6,Component.empty());
     addRenderableWidget(experienceLabel);
 
     addRenderableWidget(new ToggleSideButton(leftPos + 198,yStart,20,20,Component.empty(),
@@ -99,16 +98,10 @@ public class AutoAnvilScreen extends AbstractContainerScreen<AutoAnvilMenu> {
   protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
     guiGraphics.blit(ANVIL_RESOURCE,this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
-
     float ratio = (float)menu.getProgress() / AutoAnvilBlockEntity.PROGRESS_MAX;
-
     int w = (int) (ratio * 22);
-
-    guiGraphics.blit(ANVIL_RESOURCE,this.leftPos+100, this.topPos+56, 198, 0, w, 16);
-
-
+    guiGraphics.blit(ANVIL_RESOURCE,this.leftPos+101, this.topPos+65, 198, 0, w, 16);
     //guiGraphics.blitSprite(ARROW,leftPos+100, topPos+1,0,1, 16);
-
   }
 
   public class ToggleSideButton extends Button {
@@ -142,6 +135,9 @@ public class AutoAnvilScreen extends AbstractContainerScreen<AutoAnvilMenu> {
     }
   }
 
+  private static final Component TOO_EXPENSIVE_TEXT = Component.translatable("container.repair.expensive");
+
+
   @Override
   protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
     super.renderLabels(guiGraphics, mouseX, mouseY);
@@ -150,16 +146,18 @@ public class AutoAnvilScreen extends AbstractContainerScreen<AutoAnvilMenu> {
     int capacity = menu.getExperienceCapacity();
 
     int xpPoints = Util.leveltoXPCost(level);
+    Component component = Component.translatable("container.repair.cost", level);
 
     int color = 0x007f00;
 
     if (xpPoints>capacity) {
-      color = 0x7f0000;
+      component = TOO_EXPENSIVE_TEXT;
+      color = 0x9f0000;
     } else if (xpPoints>stored) {
-      color = 0x9f9f00;
+      color = 0x9f0000;
     }
 
-    guiGraphics.drawString(font,Component.literal("Lvl: "+level+" | XP: "+xpPoints),50,40,0xff000000| color,false);
+    guiGraphics.drawString(font,component,70,inventoryLabelY,0xff000000| color,false);
   }
 
   public class ToggleSidesButton extends Button {
@@ -198,7 +196,9 @@ public class AutoAnvilScreen extends AbstractContainerScreen<AutoAnvilMenu> {
   public class ExperienceLabel extends AbstractWidget {
 
     protected static final ResourceLocation XP_BAR = AutoAnvil.id("xp_bar");
+    protected static final ResourceLocation XP_BAR_2 = AutoAnvil.id("xp_bar_2");
     protected static final ResourceLocation XP_BAR_BACKGROUND = AutoAnvil.id("xp_bar_background");
+    protected static final ResourceLocation XP_BAR_2_BACKGROUND = AutoAnvil.id("xp_bar_2_background");
 
 
     public ExperienceLabel(int x, int y, int width, int height, Component message) {
@@ -207,19 +207,17 @@ public class AutoAnvilScreen extends AbstractContainerScreen<AutoAnvilMenu> {
 
     @Override
     protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-      RenderSystem.setShaderColor(0,1,0,1);
       //RenderSystem.enableBlend();
-      guiGraphics.blitSprite(XP_BAR_BACKGROUND,getX(),getY(),0,width,height);
+      guiGraphics.blitSprite(XP_BAR_2_BACKGROUND,getX(),getY(),0,width,height);
 
       float ratio = (float)menu.getExperience() / (Math.max(menu.getExperienceCapacity(),1));
 
       if (ratio > 1) {ratio = 1;}
 
-      int y0 = (int) (ratio * 64);
+      int x0 = (int) (ratio * 18);
 
-      guiGraphics.blitSprite(XP_BAR,getX(), getY() + 64 - y0,0,width, y0);
+      guiGraphics.blitSprite(XP_BAR_2,getX()+1, getY() +1,0,x0, height - 2);
 
-      RenderSystem.setShaderColor(1,1,1,1);
     }
 
     @Override

@@ -62,6 +62,8 @@ public class AutoAnvil {
         MenuTypes.init();
     }
 
+    public static final boolean ENABLE_UPGRADES = false;
+
     public static final ResourceLocation AUTO_ANVIL = id("auto_anvil");
 
     public static ResourceLocation id(String path) {

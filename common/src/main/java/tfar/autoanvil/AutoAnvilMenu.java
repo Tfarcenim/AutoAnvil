@@ -29,16 +29,17 @@ public class AutoAnvilMenu extends AbstractContainerMenu {
         this.autoAnvilInventory = autoAnvilInventory;
         this.data = data;
 
-        int y = 38;
+        int y = 47;
 
         this.addSlot(new AutoAnvilSlot(autoAnvilInventory, AutoAnvilInventory.OUTPUT_SLOT, 134, y+18));
-        this.addSlot(new AutoAnvilSlot(autoAnvilInventory, AutoAnvilInventory.INPUT_SLOT_XP_BOTTLE, 27, y));
+        this.addSlot(new AutoAnvilSlot(autoAnvilInventory, AutoAnvilInventory.INPUT_SLOT_XP_BOTTLE, 27, y-9));
         this.addSlot(new AutoAnvilSlot(autoAnvilInventory, AutoAnvilInventory.INPUT_SLOT_PRIMARY, 27, y+18));
         this.addSlot(new AutoAnvilSlot(autoAnvilInventory, AutoAnvilInventory.INPUT_SLOT_SECONDARY,76 ,y+18));
 
-        this.addSlot(new AutoAnvilSlot(autoAnvilInventory, AutoAnvilInventory.UPGRADE_SLOT_1, 177, 5));
-        this.addSlot(new AutoAnvilSlot(autoAnvilInventory, AutoAnvilInventory.UPGRADE_SLOT_2, 177, 23));
-
+        if (AutoAnvil.ENABLE_UPGRADES) {
+            this.addSlot(new AutoAnvilSlot(autoAnvilInventory, AutoAnvilInventory.UPGRADE_SLOT_1, 177, 5));
+            this.addSlot(new AutoAnvilSlot(autoAnvilInventory, AutoAnvilInventory.UPGRADE_SLOT_2, 177, 23));
+        }
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
                 this.addSlot(new Slot(inv, j + i * 9 + 9, 8 + j * 18, y+55 + i * 18));

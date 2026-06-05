@@ -1,7 +1,3 @@
-// 1.21.1	2026-06-04T18:48:42.1962677	Recipes
+// 1.21.1	2026-06-05T17:36:03.4496359	Recipes
 9907372caa8d353a7c9140de19fd14d3d99b04b0 data/autoanvil/advancement/recipes/misc/auto_anvil.json
-474eca39a1e169f20eb523d2c0a6f5c1e44e3b00 data/autoanvil/advancement/recipes/misc/efficiency_upgrade.json
-c2d049fd618e793ad3ae270de1e7b3c9dda0cac3 data/autoanvil/advancement/recipes/misc/level_upgrade.json
-caef4e9e2229821c2c010c2d69479a55a7f4efbd data/autoanvil/recipe/auto_anvil.json
-60fe6e61b7d849f1a8cf71a6d7a5da993b403b55 data/autoanvil/recipe/efficiency_upgrade.json
-065a3b7c9ead58171f12ce193d04bca797299bd7 data/autoanvil/recipe/level_upgrade.json
+800af59e018cfb2b17db0e44765fa0a0ac789252 data/autoanvil/recipe/auto_anvil.json

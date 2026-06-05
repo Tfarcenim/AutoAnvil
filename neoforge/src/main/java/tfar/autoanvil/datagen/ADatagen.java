@@ -6,10 +6,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.data.loot.packs.*;
-import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.recipes.*;
 import net.minecraft.data.tags.FluidTagsProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -71,34 +68,43 @@ public class ADatagen {
         @Override
         protected void buildRecipes(RecipeOutput recipeOutput) {
             output = recipeOutput;
-            ShapedRecipeBuilder.shaped(RecipeCategory.MISC, AutoAnvil.AItems.AUTO_ANVIL)
-                    .define('i', Tags.Items.INGOTS_IRON)
-                    .define('R', Blocks.REDSTONE_BLOCK)
-                    .define('A',Blocks.ANVIL)
-                    .pattern("iii")
-                    .pattern("iAi")
-                    .pattern("iRi")
-                    .unlockedBy(getHasName(Blocks.ANVIL),has(Blocks.ANVIL))
-                    .save(output);
 
-            ShapedRecipeBuilder.shaped(RecipeCategory.MISC, AutoAnvil.AItems.EFFICIENCY_UPGRADE)
-                    .define('g', Tags.Items.INGOTS_GOLD)
-                    .define('G', Blocks.GLOWSTONE)
-                    .define('I',Blocks.IRON_BLOCK)
-                    .pattern("gGg")
-                    .pattern("GIG")
-                    .pattern("gGg")
-                    .unlockedBy(getHasName(Blocks.IRON_BLOCK),has(Blocks.IRON_BLOCK))
-                    .save(output);
+            if (AutoAnvil.ENABLE_UPGRADES) {
 
-            ShapedRecipeBuilder.shaped(RecipeCategory.MISC, AutoAnvil.AItems.LEVEL_UPGRADE)
-                    .define('e', Items.EXPERIENCE_BOTTLE)
-                    .define('A',Blocks.ANVIL)
-                    .pattern("eee")
-                    .pattern("eAe")
-                    .pattern("eee")
-                    .unlockedBy(getHasName(Blocks.ANVIL),has(Blocks.ANVIL))
-                    .save(output);
+                ShapedRecipeBuilder.shaped(RecipeCategory.MISC, AutoAnvil.AItems.AUTO_ANVIL)
+                        .define('i', Tags.Items.INGOTS_IRON)
+                        .define('R', Blocks.REDSTONE_BLOCK)
+                        .define('A', Blocks.ANVIL)
+                        .pattern("iii")
+                        .pattern("iAi")
+                        .pattern("iRi")
+                        .unlockedBy(getHasName(Blocks.ANVIL), has(Blocks.ANVIL))
+                        .save(output);
+
+                ShapedRecipeBuilder.shaped(RecipeCategory.MISC, AutoAnvil.AItems.EFFICIENCY_UPGRADE)
+                        .define('g', Tags.Items.INGOTS_GOLD)
+                        .define('G', Blocks.GLOWSTONE)
+                        .define('I', Blocks.IRON_BLOCK)
+                        .pattern("gGg")
+                        .pattern("GIG")
+                        .pattern("gGg")
+                        .unlockedBy(getHasName(Blocks.IRON_BLOCK), has(Blocks.IRON_BLOCK))
+                        .save(output);
+
+                ShapedRecipeBuilder.shaped(RecipeCategory.MISC, AutoAnvil.AItems.LEVEL_UPGRADE)
+                        .define('e', Items.EXPERIENCE_BOTTLE)
+                        .define('A', Blocks.ANVIL)
+                        .pattern("eee")
+                        .pattern("eAe")
+                        .pattern("eee")
+                        .unlockedBy(getHasName(Blocks.ANVIL), has(Blocks.ANVIL))
+                        .save(output);
+            } else {
+                ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, AutoAnvil.AItems.AUTO_ANVIL)
+                        .requires(Blocks.ANVIL)
+                        .unlockedBy(getHasName(Blocks.ANVIL), has(Blocks.ANVIL))
+                        .save(output);
+            }
         }
     }
 

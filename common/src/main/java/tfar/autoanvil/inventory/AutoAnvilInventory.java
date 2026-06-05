@@ -53,6 +53,7 @@ public class AutoAnvilInventory {
         return switch (index) {
             case OUTPUT_SLOT -> false;
             case INPUT_SLOT_XP_BOTTLE -> stack.is(Items.EXPERIENCE_BOTTLE);
+            case INPUT_SLOT_PRIMARY, INPUT_SLOT_SECONDARY -> !stack.is(Items.EXPERIENCE_BOTTLE);
             case UPGRADE_SLOT_1 -> stack.is(AutoAnvil.AItems.LEVEL_UPGRADE);
             case UPGRADE_SLOT_2 -> stack.is(AutoAnvil.AItems.EFFICIENCY_UPGRADE);
             default -> true;
