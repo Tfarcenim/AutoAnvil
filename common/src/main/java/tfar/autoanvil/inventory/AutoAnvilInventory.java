@@ -162,7 +162,7 @@ public class AutoAnvilInventory {
         return reachedLimit ? stack.copyWithCount(stack.getCount() - limit) : ItemStack.EMPTY;
     }
 
-    protected int getStackLimit(int slot, ItemStack stack) {
+    public int getStackLimit(int slot, ItemStack stack) {
         return Math.min(getSlotLimit(slot), stack.getMaxStackSize());
     }
 

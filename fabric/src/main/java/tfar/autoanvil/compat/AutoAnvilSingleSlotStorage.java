@@ -40,6 +40,6 @@ public class AutoAnvilSingleSlotStorage extends SingleStackStorage {
 
     @Override
     protected int getCapacity(ItemVariant variant) {
-        return autoAnvilInventory.getSlotLimit(slot);
+        return autoAnvilInventory.getStackLimit(slot,variant.toStack());
     }
 }
